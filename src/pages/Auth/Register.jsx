@@ -1,12 +1,23 @@
-import { ErrorMessage, Field, Form, Formik, validateYupSchema } from 'formik';
+import { ErrorMessage, Field, Form, Formik, validateYupSchema } from "formik";
 
-import React, { useState } from 'react';
-import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import React, { useState } from "react";
+import {
+  Button,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import * as Yup from "yup";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-
-const initialValues = { firstName: "", lastName: "", email: "", password: "", gender: "" };
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  gender: "",
+};
 const validationSchema = {
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
@@ -15,7 +26,6 @@ const validationSchema = {
 };
 
 const Register = () => {
-
   const [gender, setGender] = useState("");
   const navigate = useNavigate();
   // const dispatch = useDispatch();
@@ -28,7 +38,7 @@ const Register = () => {
 
   const handleChange = (event) => {
     setGender(event.target.value);
-  }
+  };
 
   return (
     <>
@@ -48,7 +58,11 @@ const Register = () => {
                 variant="outlined"
                 fullWidth
               />
-              <ErrorMessage name="firstName" component={"div"} className='text-red-500' />
+              <ErrorMessage
+                name="firstName"
+                component={"div"}
+                className="text-red-500"
+              />
             </div>
 
             <div>
@@ -60,7 +74,11 @@ const Register = () => {
                 variant="outlined"
                 fullWidth
               />
-              <ErrorMessage name="lastName" component={"div"} className='text-red-500' />
+              <ErrorMessage
+                name="lastName"
+                component={"div"}
+                className="text-red-500"
+              />
             </div>
 
             <div>
@@ -72,12 +90,26 @@ const Register = () => {
                 variant="outlined"
                 fullWidth
               />
-              <ErrorMessage name="email" component={"div"} className='text-red-500' />
+              <ErrorMessage
+                name="email"
+                component={"div"}
+                className="text-red-500"
+              />
             </div>
             <div>
-              <Field as={TextField} name="password" placeholder="password" type="password" variant="outlined" fullWidth />
-              <ErrorMessage name="password" component={"div"} className='text-red-500' />
-
+              <Field
+                as={TextField}
+                name="password"
+                placeholder="password"
+                type="password"
+                variant="outlined"
+                fullWidth
+              />
+              <ErrorMessage
+                name="password"
+                component={"div"}
+                className="text-red-600"
+              />
             </div>
 
             <div>
@@ -87,34 +119,46 @@ const Register = () => {
                 aria-label="gender"
                 name="gender"
               >
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                <FormControlLabel value="other" control={<Radio />} label="Other" />
-                <ErrorMessage name="gender" component={"div"} className='text-red-500' />
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                />
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Other"
+                />
+                <ErrorMessage
+                  name="gender"
+                  component={"div"}
+                  className="text-red-500"
+                />
               </RadioGroup>
             </div>
-
           </div>
           <Button
             sx={{ padding: ".8rem 0rem" }}
             fullWidth
             type="submit"
             variant="contained"
-            color="primary">
+            color="primary"
+          >
             Register
           </Button>
         </Form>
       </Formik>
-      <div className='flex gap-2 items-center justify-center pt-5'>
-        <p className=''>Already have an account?</p>
-        <Button
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </Button>
+      <div className="flex gap-2 items-center justify-center pt-5">
+        <p className="">Already have an account?</p>
+        <Button onClick={() => navigate("/login")}>Login</Button>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
