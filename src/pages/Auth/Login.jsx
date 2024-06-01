@@ -1,10 +1,9 @@
-import { ErrorMessage, Field, Form, Formik, validateYupSchema } from 'formik';
+import { ErrorMessage, Field, Form, Formik, validateYupSchema } from "formik";
 
-import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import React, { useState } from "react";
+import { Button, TextField } from "@mui/material";
 import * as Yup from "yup";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: "", password: "" };
 const validationSchema = {
@@ -15,7 +14,6 @@ const validationSchema = {
 };
 
 const Login = () => {
-
   const [formValue, setFormValue] = useState();
   // const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,15 +32,34 @@ const Login = () => {
         <Form className="space-y-5">
           <div className="space-y-5">
             <div>
-              <Field as={TextField} name="email" placeholder="Email" type="email" variant="outlined" fullWidth />
-              <ErrorMessage name="email" component={"div"} className='text-red-500' />
+              <Field
+                as={TextField}
+                name="email"
+                placeholder="Email"
+                type="email"
+                variant="outlined"
+                fullWidth
+              />
+              <ErrorMessage
+                name="email"
+                component={"div"}
+                className="text-red-500"
+              />
             </div>
             <div>
-              <Field as={TextField} name="password" placeholder="password" type="password" variant="outlined" fullWidth />
-              <ErrorMessage name="password" component={"div"} className='text-red-500' />
-
-
-
+              <Field
+                as={TextField}
+                name="password"
+                placeholder="password"
+                type="password"
+                variant="outlined"
+                fullWidth
+              />
+              <ErrorMessage
+                name="password"
+                component={"div"}
+                className="text-red-500"
+              />
             </div>
           </div>
           <Button
@@ -50,17 +67,18 @@ const Login = () => {
             fullWidth
             type="submit"
             variant="contained"
-            color="primary">
+            color="primary"
+          >
             Login
           </Button>
         </Form>
       </Formik>
-      <div className='flex gap-2 items-center justify-center pt-5'>
+      <div className="flex gap-2 items-center justify-center pt-5">
         <p>Don't have an account yet?</p>
         <Button onClick={() => navigate("/register")}>Register</Button>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
