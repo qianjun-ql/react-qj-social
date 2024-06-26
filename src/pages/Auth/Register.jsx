@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUserAction } from "../../Redux/Auth/auth.action";
 
 const initialValues = {
   firstName: "",
@@ -28,12 +30,12 @@ const validationSchema = {
 const Register = () => {
   const [gender, setGender] = useState("");
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
     values.gender = gender;
     console.log("handle submit", values);
-    // dispatch(registerUser({data:values}));
+    dispatch(registerUserAction({ data: values }));
   };
 
   const handleChange = (event) => {
@@ -155,7 +157,7 @@ const Register = () => {
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
         <p className="">Already have an account?</p>
-        <Button onClick={() => navigate("/login")}>Login</Button>
+        <Button onClick={() => navigate("/auth/login")}>Login</Button>
       </div>
     </>
   );

@@ -9,7 +9,7 @@ const Auth = () => {
     <div>
       <Grid container>
         <Grid className="h-screen overflow-hidden" item xs={7}>
-          <img className="h-full w-full" src="./social-bg.jpeg" />
+          <img className="h-full w-full" src="/social-bg.jpeg" />
         </Grid>
         <Grid item xs={5}>
           <div className="px-20 flex flex-col justify-center h-full">
@@ -21,9 +21,9 @@ const Auth = () => {
                 </p>
               </div>
               <Routes>
-                <Route path="/login" element={<Login />}></Route>
-                <Route path="/" element={<Login />}></Route>
-                <Route path="/register" element={<Register />}></Route>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/auth/*" element={<Login />} />
               </Routes>
             </Card>
           </div>

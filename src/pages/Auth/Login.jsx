@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { logingUserAction } from "../../Redux/Auth/auth.action";
+import { useDispatch } from "react-redux";
 
 const initialValues = { email: "", password: "" };
 const validationSchema = {
@@ -15,11 +17,11 @@ const validationSchema = {
 
 const Login = () => {
   const [formValue, setFormValue] = useState();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = (values) => {
-    // dispatch(loginUser({ data: values }));
+    dispatch(logingUserAction({ data: values }));
   };
 
   return (
@@ -75,7 +77,7 @@ const Login = () => {
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
         <p>Don't have an account yet?</p>
-        <Button onClick={() => navigate("/register")}>Register</Button>
+        <Button onClick={() => navigate("/auth/register")}>Register</Button>
       </div>
     </>
   );
