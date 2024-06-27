@@ -21,7 +21,7 @@ export const sidebarMenu = [
   {
     title: "Create Reels",
     icon: <CreateIcon />,
-    path: "/",
+    path: "/create-reels",
   },
   {
     title: "Notification",
@@ -31,7 +31,7 @@ export const sidebarMenu = [
   {
     title: "Message",
     icon: <MessageIcon />,
-    path: "/",
+    path: "/message",
   },
   {
     title: "List",
@@ -46,6 +46,6 @@ export const sidebarMenu = [
   {
     title: "Profile",
     icon: <PersonIcon />,
-    path: "/",
+    path: "/profile",
   },
 ];

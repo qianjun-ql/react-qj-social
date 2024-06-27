@@ -24,8 +24,8 @@ export const logingUserAction = (loginData) => async (dispatch) => {
       loginData.data
     );
 
-    if (data.jwt) {
-      localStorage.setItem("jwt", data.jwt);
+    if (data.token) {
+      localStorage.setItem("jwt", data.token);
     }
     console.log("login success", data);
     dispatch({ type: LOGIN_SUCCESS, payload: data.jwt });
@@ -44,8 +44,8 @@ export const registerUserAction = (registerData) => async (dispatch) => {
       registerData.data
     );
 
-    if (data.jwt) {
-      localStorage.setItem("jwt", data.jwt);
+    if (data.token) {
+      localStorage.setItem("jwt", data.token);
     }
     console.log("register success", data);
     dispatch({ type: REGISTER_SUCCESS, payload: data.jwt });
@@ -55,14 +55,15 @@ export const registerUserAction = (registerData) => async (dispatch) => {
   }
 };
 
-export const getProfileAction = (reqData) => async (dispatch) => {
+export const getProfileAction = (token) => async (dispatch) => {
   dispatch({ type: GET_PROFILE_REQUEST });
 
   try {
-    const { data } = await axios.get(
-      `${API_BASE_URL}/api/users/profile`,
-      reqData
-    );
+    const { data } = await axios.get(`${API_BASE_URL}/api/users/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     console.log("profile", data);
     dispatch({ type: GET_PROFILE_SUCCESS, payload: data });
@@ -76,7 +77,7 @@ export const updateProfileAction = (jwt) => async (dispatch) => {
   dispatch({ type: UPDATE_PROFILE_REQUEST });
 
   try {
-    const { data } = await api.put(`${API_BASE_URL}/api/users`, {
+    const { data } = await api.post(`${API_BASE_URL}/api/users`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },

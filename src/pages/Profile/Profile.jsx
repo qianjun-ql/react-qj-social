@@ -3,10 +3,16 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../../components/Post/PostCard";
 import UserReelCard from "../../components/Reels/UserReelCard";
+import ProfileModal from "./ProfileModal";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const { id } = useParams();
   const [value, setValue] = React.useState("posts");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const { auth } = useSelector((store) => store);
 
   const tabs = [
     { value: "posts", name: "Post" },
@@ -113,6 +119,9 @@ const Profile = () => {
           </div>
         </section>
       </div>
+      <section>
+        <ProfileModal open={open} handleClose={handleClose} />
+      </section>
     </Card>
   );
 };

@@ -23,7 +23,7 @@ const Auth = () => {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/auth/*" element={<Login />} />
+                <Route path="/*" element={<Login />} />
               </Routes>
             </Card>
           </div>

@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Center from "../../components/Center/Center";
 import Reels from "../../components/Reels/Reels";
@@ -7,9 +7,16 @@ import CreateReelsForm from "../../components/Reels/CreateReelsForm";
 import Profile from "../Profile/Profile";
 import RightSection from "../../components/RightSection/RightSection";
 import SideBar from "../../components/SideBar/SideBar";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfileAction } from "../../Redux/Auth/auth.action";
 
 const HomePage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector((store) => store);
+
+  console.log("auth", auth);
 
   return (
     <div className="px-20">
