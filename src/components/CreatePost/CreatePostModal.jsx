@@ -94,8 +94,8 @@ const CreatePostModal = ({ handleClose, open }) => {
                 </div>
               )}
 
-              <div>
-                <Button></Button>
+              <div className="flex w-full justify-end">
+                <Button sx={{ borderRadius: "1.5rem" }}>Post</Button>
               </div>
             </div>
           </form>
