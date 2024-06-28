@@ -7,6 +7,8 @@ import {
   REGISTER_FAILURE,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
 } from "./auth.actionType";
 
 const initialState = {
@@ -23,6 +25,7 @@ export const authReducer = (state = initialState, action) => {
       return { ...state, loading: true, error: null };
 
     case GET_PROFILE_SUCCESS:
+    case UPDATE_PROFILE_SUCCESS:
       return { ...state, user: action.payload, error: null, loading: false };
 
     case LOGIN_SUCCESS:

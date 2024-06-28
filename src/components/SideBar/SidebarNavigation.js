@@ -46,6 +46,5 @@ export const sidebarMenu = [
   {
     title: "Profile",
     icon: <PersonIcon />,
-    path: "/profile",
   },
 ];

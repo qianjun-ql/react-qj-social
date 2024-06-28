@@ -73,15 +73,11 @@ export const getProfileAction = (token) => async (dispatch) => {
   }
 };
 
-export const updateProfileAction = (jwt) => async (dispatch) => {
+export const updateProfileAction = (reqData) => async (dispatch) => {
   dispatch({ type: UPDATE_PROFILE_REQUEST });
 
   try {
-    const { data } = await api.post(`${API_BASE_URL}/api/users`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
+    const { data } = await api.put(`${API_BASE_URL}/api/users`, reqData);
 
     console.log("upadte profile", data);
     dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data });

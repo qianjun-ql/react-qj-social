@@ -1,12 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { updateProfileAction } from "../../Redux/Auth/auth.action";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
@@ -16,7 +15,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 600,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   outline: "none",
   overFlow: "scroll-y",
@@ -27,10 +25,6 @@ const style = {
 export default function ProfileModal({ open, handleClose }) {
   const dispatch = useDispatch();
 
-  const handleSubmit = (values) => {
-    console.log(values);
-  };
-
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -39,6 +33,7 @@ export default function ProfileModal({ open, handleClose }) {
     onSubmit: (values) => {
       console.log(values);
       dispatch(updateProfileAction(values));
+      handleClose();
     },
   });
 
@@ -57,7 +52,41 @@ export default function ProfileModal({ open, handleClose }) {
                 <IconButton onClick={handleClose}>
                   <CloseIcon />
                 </IconButton>
+                <p>Edit Profile</p>
               </div>
+              <Button type="submit">Submit</Button>
+            </div>
+            <div className="h-[15rem]">
+              <img
+                className="w-full h-full rounded-t-md"
+                src="https://cdn.pixabay.com/photo/2022/01/01/15/40/train-6907884_1280.jpg"
+                alt=""
+              />
+            </div>
+            <div className="pl-5">
+              <Avatar
+                className="transform -translate-y-2/4"
+                sx={{ width: "10rem", height: "10rem" }}
+                src="https://cdn.pixabay.com/photo/2019/08/28/14/24/tokyo-4436914_1280.jpg"
+              />
+            </div>
+            <div className="space-y-3">
+              <TextField
+                fullWidth
+                id="firstName"
+                name="firstName"
+                label="First Name"
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+              />
+              <TextField
+                fullWidth
+                id="lastName"
+                name="lastName"
+                label="Last Name"
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+              />
             </div>
           </form>
         </Box>

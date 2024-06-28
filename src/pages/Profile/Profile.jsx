@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../../components/Post/PostCard";
 import UserReelCard from "../../components/Reels/UserReelCard";
@@ -13,6 +13,7 @@ const Profile = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { auth } = useSelector((store) => store);
+  const [jwtToken, setJwtToken] = useState("");
 
   const tabs = [
     { value: "posts", name: "Post" },
@@ -25,7 +26,7 @@ const Profile = () => {
   const reels = [1, 1, 1, 1, 1];
   const savePosts = [1, 1, 1, 1, 1];
 
-  const handleChange = (value, newValue) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
@@ -47,7 +48,11 @@ const Profile = () => {
           />
 
           {true ? (
-            <Button variant="outlined" sx={{ borderRadius: "20px" }}>
+            <Button
+              onClick={handleOpen}
+              variant="outlined"
+              sx={{ borderRadius: "20px" }}
+            >
               Edit Profile
             </Button>
           ) : (
@@ -58,8 +63,10 @@ const Profile = () => {
         </div>
 
         <div className="p-5">
-          <h1 className="py-1 font-bold text-xl">Cheryl</h1>
-          <p>@Cheryl</p>
+          <h1 className="py-1 font-bold text-xl">
+            {auth.user?.firstName + " " + auth.user.lastName}
+          </h1>
+          <p>@{auth.user?.firstName + "_" + auth.user.lastName}</p>
 
           <div className="flex gap-5 items-center py-3">
             <span>40 posts</span>
