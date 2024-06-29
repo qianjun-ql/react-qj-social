@@ -12,7 +12,7 @@ import {
 } from "./auth.actionType";
 
 const initialState = {
-  jwt: null,
+  jwt: localStorage.getItem("jwt") || null,
   error: null,
   loading: false,
   user: null,

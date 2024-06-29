@@ -12,8 +12,8 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { auth } = useSelector((store) => store);
-  const [jwtToken, setJwtToken] = useState("");
+  // const { auth } = useSelector((store) => store);
+  const auth = useSelector((state) => state.auth);
 
   const tabs = [
     { value: "posts", name: "Post" },

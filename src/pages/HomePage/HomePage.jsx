@@ -14,7 +14,8 @@ const HomePage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
-  const { auth } = useSelector((store) => store);
+  // const { auth } = useSelector((store) => store);
+  const auth = useSelector((state) => state.auth);
 
   console.log("auth", auth);
 
@@ -30,7 +31,7 @@ const HomePage = () => {
           item
           className="p flex justify-center"
           xs={12}
-          lg={location.pathname == "/" ? 6 : 9}
+          lg={location.pathname === "/" ? 6 : 9}
         >
           <Routes>
             <Route path="/" element={<Center />} />

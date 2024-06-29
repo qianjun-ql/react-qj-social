@@ -1,8 +1,17 @@
-import { Avatar, Box, Button, IconButton, Modal } from "@mui/material";
+import {
+  Avatar,
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Modal,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
 const style = {
   position: "absolute",
@@ -11,7 +20,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 500,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   borderRadius: ".6rem",
@@ -19,15 +27,36 @@ const style = {
 };
 
 const CreatePostModal = ({ handleClose, open }) => {
-  const formik = useFormik();
+  const [isLoaing, setIsLoading] = useState();
   const [selectedImage, setSelectedImage] = useState();
-  const [selectedVideo, setSelectedVideo] = useState();
+  const [selectedVideo, setSelectedVideo] = useState(false);
 
-  const handleSelectImage = () => {
-    setSelectedImage();
+  const handleSelectImage = async (event) => {
+    setIsLoading(true);
+    const imgUrl = await uploadToCloudinary(event.target.files[0], "image");
+    setSelectedImage(imgUrl);
+    setIsLoading(false);
+    formik.setFieldValue("image", imgUrl);
   };
 
-  const handleSelectVideo = () => {};
+  const handleSelectVideo = async (event) => {
+    setIsLoading(true);
+    const videoUrl = await uploadToCloudinary(event.target.files[0], "video");
+    setSelectedVideo(videoUrl);
+    setIsLoading(false);
+    formik.setFieldValue("video", videoUrl);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      caption: "",
+      image: "",
+      video: "",
+    },
+    onSubmit: (values) => {
+      console.log("formik values", values);
+    },
+  });
 
   return (
     <div>
@@ -49,6 +78,7 @@ const CreatePostModal = ({ handleClose, open }) => {
               </div>
 
               <textarea
+                className="outline-none w-full mt-5 p-2 bg-transparent border border-[#3b4054] rounded-sm`"
                 placeholder="Please enter caption"
                 name="caption"
                 id=""
@@ -66,11 +96,11 @@ const CreatePostModal = ({ handleClose, open }) => {
                     id="image-input"
                   />
                   <label htmlFor="image-input">
-                    <IconButton color="primary">
+                    <IconButton color="primary" component="span">
                       <ImageIcon />
                     </IconButton>
+                    <span>Image</span>
                   </label>
-                  <span>Image</span>
                 </div>
                 <div>
                   <input
@@ -81,7 +111,7 @@ const CreatePostModal = ({ handleClose, open }) => {
                     id="video-input"
                   />
                   <label htmlFor="video-input">
-                    <IconButton color="primary">
+                    <IconButton color="primary" component="span">
                       <VideocamIcon />
                     </IconButton>
                   </label>
@@ -95,10 +125,23 @@ const CreatePostModal = ({ handleClose, open }) => {
               )}
 
               <div className="flex w-full justify-end">
-                <Button sx={{ borderRadius: "1.5rem" }}>Post</Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{ borderRadius: "1.5rem" }}
+                >
+                  Post
+                </Button>
               </div>
             </div>
           </form>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={isLoaing}
+            onClick={handleClose}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
         </Box>
       </Modal>
     </div>
