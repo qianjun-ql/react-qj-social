@@ -1,7 +1,7 @@
-const cloud_name = "dqlgwzigd";
-const upload_preset = "qj-social";
-
 export const uploadToCloudinary = async (img, fileType) => {
+  const cloud_name = "dqlgwzigd";
+  const upload_preset = "qj-social";
+
   if (img && fileType) {
     const data = new FormData();
     data.append("file", img);
@@ -12,7 +12,7 @@ export const uploadToCloudinary = async (img, fileType) => {
       `https://api.cloudinary.com/v1_1/${cloud_name}/${fileType}/upload`,
       { method: "POST", body: data }
     );
-
+    console.log();
     console.log("res", res);
 
     const fileData = await res.json();
