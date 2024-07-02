@@ -1,4 +1,3 @@
-import { CREATE_COMMENT_SUCCESS } from "./comment.actionType";
 import {
   CREATE_POST_FAILURE,
   CREATE_POST_REQUEST,
@@ -45,15 +44,6 @@ export const postReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-
-    // case CREATE_COMMENT_SUCCESS:
-    //   console.log("CREATE_COMMENT_SUCCESS action payload:", action.payload);
-    //   return {
-    //     ...state,
-    //     newComment: action.payload,
-    //     loading: false,
-    //     error: null,
-    //   };
 
     case LIKE_POST_SUCCESS:
       return {

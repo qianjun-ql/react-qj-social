@@ -10,7 +10,7 @@ const initialState = {
   newComment: null,
 };
 
-export const CommentReducer = (state = initialState, action) => {
+export const commentReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_COMMENT_SUCCESS:
       console.log("CREATE_COMMENT_SUCCESS action payload:", action.payload);
