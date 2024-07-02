@@ -30,6 +30,8 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  console.log("Profile posts:", posts); // Debugging line
+
   return (
     <Card className="my-10 w-[70%] ">
       <div className="rounded-md">

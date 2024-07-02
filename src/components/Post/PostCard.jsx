@@ -21,22 +21,30 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useDispatch, useSelector } from "react-redux";
 // import { createCommentAction } from "../../Redux/Post/post.action";
 import { createCommentAction } from "../../Redux/Comment/comment.action";
+import { likePostAction } from "../../Redux/Post/post.action";
+import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
 
 const PostCard = ({ item }) => {
   const [showComments, setShowComments] = useState(false);
   const handleShowComments = () => setShowComments(!showComments);
   const dispatch = useDispatch();
   const post = useSelector((state) => state.post);
+  const auth = useSelector((state) => state.auth);
+  // const { post, auth } = useSelector((store) => store);
 
   const handleCreateComment = (content) => {
     const reqData = {
-      postId: item.id,
+      postId: item?.id,
       data: {
         content,
       },
     };
 
     dispatch(createCommentAction(reqData));
+  };
+
+  const handleLikePost = () => {
+    dispatch(likePostAction(item.id));
   };
 
   return (
@@ -60,12 +68,17 @@ const PostCard = ({ item }) => {
           item.user.lastName.toLowerCase()
         }
       />
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="194"
         image={item.image}
         // video={item.video}
         alt="Paella dish"
+      /> */}
+      <img
+        className="w-full max-h-[30rem] object-cover object-top"
+        src={item.image}
+        alt=""
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -75,8 +88,12 @@ const PostCard = ({ item }) => {
 
       <CardActions className="flex justify-between" disableSpacing>
         <div>
-          <IconButton>
-            {true ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          <IconButton onClick={handleLikePost}>
+            {isLikedByReqUser(auth.user.id, item) ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </IconButton>
           <IconButton>
             <ShareIcon />
@@ -87,7 +104,7 @@ const PostCard = ({ item }) => {
         </div>
         <div>
           <IconButton>
-            {true ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+            {false ? <BookmarkIcon /> : <BookmarkBorderIcon />}
           </IconButton>
         </div>
       </CardActions>
