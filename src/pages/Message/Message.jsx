@@ -4,6 +4,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CallIcon from "@mui/icons-material/Call";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import SearchUser from "../../components/SearchUser/SearchUser";
+import UserChatCard from "./UserChatCard";
 
 const Message = () => {
   const handleSelectImage = () => {
@@ -21,9 +23,11 @@ const Message = () => {
                 <h1 className="text-xl font-bold">Home</h1>
               </div>
               <div className="h-[83vh]">
-                <div className="">Search User</div>
-                <div className="h-full space-y-4 mt-5 overflow-y-scroll hideScrollbar">
-                  User Chat Card
+                <div className="">
+                  <SearchUser />
+                </div>
+                <div className="h-full space-y-4 mt-5 overflow-y-scroll hideScrollBar">
+                  <UserChatCard />
                 </div>
               </div>
             </div>
@@ -46,7 +50,7 @@ const Message = () => {
                 </IconButton>
               </div>
             </div>
-            <div className="hideScrollbar overflow-y-scroll h-[82vh] px-2 space-y-5 py-5">
+            <div className="hideScrollBar overflow-y-scroll h-[82vh] px-2 space-y-5 py-5">
               message
             </div>
           </div>

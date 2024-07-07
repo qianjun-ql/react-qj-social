@@ -1,8 +1,13 @@
+import { Avatar, Card, CardHeader } from "@mui/material";
 import React from "react";
 
 const SearchUser = () => {
   const handleSearchUser = () => {
     console.log("search user...");
+  };
+
+  const handleClick = (id) => {
+    console.log(id);
   };
 
   return (
@@ -16,6 +21,19 @@ const SearchUser = () => {
             type="text"
           />
         </div>
+        <CardHeader></CardHeader>
+        {false && (
+          <Card>
+            <CardHeader
+              onClick={() => {
+                handleClick();
+              }}
+              avatar={<Avatar src="" />}
+              title="Cheryl"
+              subheader={"Cheryl"}
+            />
+          </Card>
+        )}
       </div>
     </div>
   );
