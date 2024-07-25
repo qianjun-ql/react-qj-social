@@ -2,11 +2,17 @@ import { Avatar, Card, CardHeader } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchUserAction } from "../../Redux/Auth/auth.action";
+import { createChat } from "../../Redux/Message/message.action";
 
 const SearchUser = () => {
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
-  const { searchUser, loading } = useSelector((state) => state.auth);
+  const {
+    searchUser,
+    loading,
+    user: currentUser,
+  } = useSelector((state) => state.auth);
+  const message = useSelector((state) => state.message);
 
   const handleSearchUser = (e) => {
     const value = e.target.value;
@@ -17,14 +23,19 @@ const SearchUser = () => {
   };
 
   const handleClick = (id) => {
-    console.log("User ID clicked:", id);
+    dispatch(createChat({ userId: id }));
   };
 
   const filteredUsers = userName
     ? searchUser.filter(
-        (user) =>
-          user.firstName.toLowerCase().includes(userName.toLowerCase()) ||
-          user.lastName.toLowerCase().includes(userName.toLowerCase())
+        (searchResult) =>
+          (searchResult.firstName
+            .toLowerCase()
+            .includes(userName.toLowerCase()) ||
+            searchResult.lastName
+              .toLowerCase()
+              .includes(userName.toLowerCase())) &&
+          searchResult.id !== currentUser?.id
       )
     : [];
 
@@ -37,7 +48,6 @@ const SearchUser = () => {
         type="text"
         value={userName}
       />
-      {loading && <p>Loading...</p>}
       {userName && filteredUsers.length > 0 && (
         <div className="absolute w-full z-20 bg-white border border-gray-300 shadow-lg mt-1">
           {filteredUsers.map((item) => (
