@@ -1,5 +1,5 @@
-import { Grid } from "@mui/material";
-import React, { useEffect } from "react";
+import { Backdrop, CircularProgress, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Center from "../../components/Center/Center";
 import Reels from "../../components/Reels/Reels";
@@ -14,10 +14,8 @@ const HomePage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
-  // const { auth } = useSelector((store) => store);
   const auth = useSelector((state) => state.auth);
-
-  console.log("auth", auth);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="px-20">
@@ -49,6 +47,13 @@ const HomePage = () => {
           </Grid>
         )}
       </Grid>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };
