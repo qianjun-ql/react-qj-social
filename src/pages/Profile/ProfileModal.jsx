@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { updateProfileAction } from "../../Redux/Auth/auth.action";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
 const style = {
   position: "absolute",
@@ -24,24 +25,49 @@ const style = {
 
 export default function ProfileModal({ open, handleClose, user }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(user?.profilePhoto || "");
+  const [selectedBanner, setSelectedBanner] = useState(user?.bannerPhoto || "");
 
   const formik = useFormik({
     initialValues: {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      bio: user?.bio || "",
+      profilePhoto: user?.profilePhoto || null,
+      bannerPhoto: user?.bannerPhoto || null,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
       dispatch(updateProfileAction(values));
       handleClose();
     },
   });
 
+  const handleSelectedImage = async (event) => {
+    setLoading(true);
+    const imgUrl = await uploadToCloudinary(event.target.files[0], "image");
+    setSelectedImage(imgUrl);
+    setLoading(false);
+    formik.setFieldValue("profilePhoto", imgUrl);
+  };
+
+  const handleSelectedBanner = async (event) => {
+    setLoading(true);
+    const bannerUrl = await uploadToCloudinary(event.target.files[0], "image");
+    setSelectedBanner(bannerUrl);
+    setLoading(false);
+    formik.setFieldValue("bannerPhoto", bannerUrl);
+  };
+
   useEffect(() => {
     if (user) {
       formik.setValues({
         firstName: user.firstName,
         lastName: user.lastName,
+        bio: user.bio,
+        profilePhoto: user.profilePhoto,
+        bannerPhoto: user.bannerPhoto,
       });
     }
   }, [user]);
@@ -66,18 +92,39 @@ export default function ProfileModal({ open, handleClose, user }) {
               <Button type="submit">Submit</Button>
             </div>
             <div className="h-[15rem]">
-              <img
-                className="w-full h-full rounded-t-md"
-                src="https://cdn.pixabay.com/photo/2022/01/01/15/40/train-6907884_1280.jpg"
-                alt=""
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleSelectedBanner}
+                style={{ display: "none" }}
+                id="bannerInput"
               />
+              <label htmlFor="bannerInput">
+                <img
+                  className="w-full h-full rounded-t-md cursor-pointer"
+                  src={selectedBanner}
+                  alt=""
+                />
+              </label>
             </div>
             <div className="pl-5">
-              <Avatar
-                className="transform -translate-y-2/4"
-                sx={{ width: "10rem", height: "10rem" }}
-                src="https://cdn.pixabay.com/photo/2019/08/28/14/24/tokyo-4436914_1280.jpg"
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleSelectedImage}
+                style={{ display: "none" }}
+                id="avatarInput"
               />
+              <label htmlFor="avatarInput">
+                <Avatar
+                  className="transform -translate-y-2/4 cursor-pointer"
+                  sx={{
+                    width: "10rem",
+                    height: "10rem",
+                  }}
+                  src={selectedImage}
+                />
+              </label>
             </div>
             <div className="space-y-3">
               <TextField
@@ -94,6 +141,14 @@ export default function ProfileModal({ open, handleClose, user }) {
                 name="lastName"
                 label="Last Name"
                 value={formik.values.lastName}
+                onChange={formik.handleChange}
+              />
+              <TextField
+                fullWidth
+                id="bio"
+                name="bio"
+                label="Bio"
+                value={formik.values.bio}
                 onChange={formik.handleChange}
               />
             </div>

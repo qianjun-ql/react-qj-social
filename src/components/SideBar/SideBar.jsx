@@ -9,7 +9,6 @@ const SideBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
-  // const { auth } = useSelector((store) => store);
   const auth = useSelector((state) => state.auth);
 
   const handleClick = (event) => {
