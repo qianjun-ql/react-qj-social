@@ -1,21 +1,27 @@
-import { Avatar, Button, CardHeader, IconButton } from "@mui/material";
 import React from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Avatar, Button, CardHeader } from "@mui/material";
 import { red } from "@mui/material/colors";
 
-const RecommendedUserCard = () => {
+const RecommendedUserCard = ({ users }) => {
+  if (!users || users.length === 0) {
+    return null;
+  }
+
   return (
     <div>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={<Button>Follow</Button>}
-        title="Cheryl"
-        subheader="September 14, 2023"
-      />
+      {users.map((user) => (
+        <CardHeader
+          key={user.id}
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {user.firstName[0]}
+            </Avatar>
+          }
+          action={<Button>Follow</Button>}
+          title={`${user.firstName} ${user.lastName}`}
+          subheader={`@${user.firstName.toLowerCase()}_${user.lastName.toLowerCase()}`}
+        />
+      ))}
     </div>
   );
 };

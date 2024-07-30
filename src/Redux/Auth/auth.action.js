@@ -16,6 +16,9 @@ import {
   UPDATE_PROFILE_FAILURE,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
+  GET_RECOMMENDED_USERS_REQUEST,
+  GET_RECOMMENDED_USERS_SUCCESS,
+  GET_RECOMMENDED_USERS_FAILURE,
 } from "./auth.actionType";
 
 export const logingUserAction = (loginData) => async (dispatch) => {
@@ -101,5 +104,15 @@ export const searchUserAction = (query) => async (dispatch) => {
   } catch (error) {
     console.log("Error:");
     dispatch({ type: SEARCH_USER_FAILURE, payload: error });
+  }
+};
+
+export const getRecommendedUsersAction = () => async (dispatch) => {
+  dispatch({ type: GET_RECOMMENDED_USERS_REQUEST });
+  try {
+    const { data } = await api.get("/api/users");
+    dispatch({ type: GET_RECOMMENDED_USERS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: GET_RECOMMENDED_USERS_FAILURE, payload: error });
   }
 };

@@ -178,11 +178,6 @@ const PostCard = ({ item }) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    console.log("PostCard rendered with item:", item);
-    console.log("Auth state:", auth);
-  }, [item, auth]);
-
   const handleCreateComment = (content) => {
     console.log("Creating comment with content:", content);
     const reqData = {

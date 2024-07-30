@@ -278,7 +278,7 @@ const Profile = () => {
         </section>
       </div>
       <section>
-        <ProfileModal open={open} handleClose={handleClose} />
+        <ProfileModal open={open} handleClose={handleClose} user={auth.user} />
       </section>
     </Card>
   );

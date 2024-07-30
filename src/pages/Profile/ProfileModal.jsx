@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -22,13 +22,13 @@ const style = {
   p: 4,
 };
 
-export default function ProfileModal({ open, handleClose }) {
+export default function ProfileModal({ open, handleClose, user }) {
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -36,6 +36,15 @@ export default function ProfileModal({ open, handleClose }) {
       handleClose();
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      formik.setValues({
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+    }
+  }, [user]);
 
   return (
     <div>
