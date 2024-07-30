@@ -5,7 +5,7 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CallIcon from "@mui/icons-material/Call";
@@ -17,12 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { createMessage, getAllChats } from "../../Redux/Message/message.action";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+import { Link } from "react-router-dom";
 
 const Message = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [stompClient, setStompClient] = useState(null);
+  const [subscription, setSubscription] = useState(null);
+  const [inputContent, setInputContent] = useState("");
+  const chatContainerRef = useRef(null);
 
   const dispatch = useDispatch();
   const message = useSelector((state) => state.message);
@@ -41,16 +48,105 @@ const Message = () => {
       content: value,
       image: selectedImage,
     };
-    dispatch(createMessage(message));
+    dispatch(createMessage({ message, sendMessageToServer }));
+    setSelectedImage(null);
   };
 
   useEffect(() => {
     dispatch(getAllChats());
-  }, []);
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   setMessages([...messages, message.message]);
+  // }, [message.message]);
+
+  // useEffect(() => {
+  //   const sock = new SockJS("http://localhost:5454/ws");
+  //   const stomp = Stomp.over(sock);
+  //   setStompClient(stomp);
+
+  //   stomp.connect({}, onConnect, onErr);
+  // }, []);
 
   useEffect(() => {
-    setMessages([...messages, message.message]);
-  }, [message.message]);
+    const sock = new SockJS("http://localhost:5454/ws");
+    const stomp = Stomp.over(sock);
+    setStompClient(stomp);
+
+    stomp.connect({}, onConnect, onErr);
+
+    return () => {
+      if (stompClient && subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, []);
+
+  const onConnect = () => {
+    console.log("websocket connected...");
+  };
+
+  const onErr = (error) => {
+    console.log("error connecting to websocket", error);
+  };
+
+  // useEffect(() => {
+  //   if (stompClient && auth.user && currentChat) {
+  //     console.log("yea it's coming inside");
+  //     const subscription = stompClient.subscribe(
+  //       `/user/${currentChat.id}/private`,
+  //       onMessageReceive
+  //     );
+  //   }
+  // });
+
+  useEffect(() => {
+    if (stompClient && auth.user && currentChat) {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+      const newSubscription = stompClient.subscribe(
+        `/user/${currentChat.id}/private`,
+        onMessageReceive
+      );
+      setSubscription(newSubscription);
+
+      return () => {
+        if (newSubscription) {
+          newSubscription.unsubscribe();
+        }
+      };
+    }
+  }, [stompClient, auth.user, currentChat]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const sendMessageToServer = (newMessage) => {
+    if (stompClient && newMessage) {
+      console.log("Sending message to server:", newMessage);
+      stompClient.send(
+        `/app/chat/${currentChat?.id.toString()}`,
+        {},
+        JSON.stringify(newMessage)
+      );
+    }
+  };
+
+  const onMessageReceive = (payload) => {
+    try {
+      const receivedMessage = JSON.parse(payload.body);
+      console.log("message received from web socket", receivedMessage);
+
+      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+    } catch (error) {
+      console.error("Failed to parse message as JSON:", error, payload.body);
+    }
+  };
 
   return (
     <div>
@@ -58,10 +154,13 @@ const Message = () => {
         <Grid className="px-5" item xs={3}>
           <div className="flex h-full justify-between space-x-2">
             <div className="w-full">
-              <div className="flex space-x-4 items-center py-5">
-                <ArrowBackIcon />
-                <h1 className="text-xl font-bold">Home</h1>
-              </div>
+              <Link to="/">
+                <div className="flex space-x-4 items-center py-5">
+                  <ArrowBackIcon style={{ cursor: "pointer" }} />
+
+                  <h1 className="text-xl font-bold">Home</h1>
+                </div>
+              </Link>
               <div className="h-[83vh]">
                 <div>
                   <SearchUser />
@@ -109,7 +208,10 @@ const Message = () => {
                   </IconButton>
                 </div>
               </div>
-              <div className="hideScrollBar overflow-y-scroll h-[82vh] px-2 space-y-5 py-5">
+              <div
+                ref={chatContainerRef}
+                className="hideScrollBar overflow-y-scroll h-[82vh] px-2 space-y-5 py-5"
+              >
                 {messages.map((item) => (
                   <ChatMessage item={item} />
                 ))}
@@ -127,7 +229,7 @@ const Message = () => {
                     onKeyPress={(e) => {
                       if (e.key === "Enter" && e.target.value) {
                         handleCreateMessage(e.target.value);
-                        setSelectedImage("");
+                        setSelectedImage(null);
                       }
                     }}
                     className="bg-transparent border border-[#3b4054] rounded-full w-[90%] py-3 px-5"

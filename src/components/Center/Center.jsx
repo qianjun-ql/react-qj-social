@@ -1,7 +1,6 @@
 import { Avatar, Card, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import AvatarList from "./AvatarList";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -11,9 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllPostAction } from "../../Redux/Post/post.action";
 
 const Center = () => {
-  const list = [11, 1, 1, 1, 1, 1];
-
-  const posts = [1, 1, 1, 1, 1];
+  // Placeholder list for future use
+  // const list = [11, 1, 1, 1, 1, 1];
 
   const dispatch = useDispatch();
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
@@ -32,7 +30,7 @@ const Center = () => {
 
   useEffect(() => {
     dispatch(getAllPostAction());
-  }, [post.newComment]);
+  }, [dispatch, post.newComment]);
 
   return (
     <div className="px-20">
@@ -43,9 +41,10 @@ const Center = () => {
           </Avatar>
           <p>New</p>
         </div>
-        {list.map((item) => (
-          <AvatarList />
-        ))}
+        {/* Placeholder for future avatar list */}
+        {/* {list.map((item, index) => (
+          <AvatarList key={index} />
+        ))} */}
       </section>
 
       <Card className="p-5 mt-5">
@@ -87,7 +86,7 @@ const Center = () => {
 
       <div className="mt-5 space-y-5">
         {post.posts.map((item) => (
-          <PostCard item={item} />
+          <PostCard key={item.id} item={item} />
         ))}
       </div>
       <div>
