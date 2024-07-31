@@ -19,6 +19,9 @@ import {
   GET_RECOMMENDED_USERS_REQUEST,
   GET_RECOMMENDED_USERS_SUCCESS,
   GET_RECOMMENDED_USERS_FAILURE,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAILURE,
 } from "./auth.actionType";
 
 export const logingUserAction = (loginData) => async (dispatch) => {
@@ -116,3 +119,24 @@ export const getRecommendedUsersAction = () => async (dispatch) => {
     dispatch({ type: GET_RECOMMENDED_USERS_FAILURE, payload: error });
   }
 };
+
+export const followUserAction =
+  (loggedInUserId, userIdToFollow) => async (dispatch) => {
+    dispatch({ type: FOLLOW_USER_REQUEST });
+    try {
+      console.log(
+        "Dispatching follow user request for user",
+        loggedInUserId,
+        "to follow",
+        userIdToFollow
+      );
+      const response = await api.put(`/api/users/follow/${userIdToFollow}`, {
+        loggedInUserId,
+      });
+      console.log("Follow user success by", loggedInUserId);
+      dispatch({ type: FOLLOW_USER_SUCCESS, payload: response.data });
+    } catch (error) {
+      console.error("Follow user failure:", error);
+      dispatch({ type: FOLLOW_USER_FAILURE, payload: error.message });
+    }
+  };

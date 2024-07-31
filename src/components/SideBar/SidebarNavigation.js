@@ -41,7 +41,7 @@ export const sidebarMenu = [
   {
     title: "Community",
     icon: <GroupIcon />,
-    path: "/",
+    path: "/community",
   },
   {
     title: "Profile",

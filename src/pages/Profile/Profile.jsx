@@ -77,7 +77,7 @@ const Profile = () => {
 
           <div className="flex gap-5 items-center py-3">
             <span>{post.userPosts.length} posts</span>
-            <span>35 followers</span>
+            <span>35 following</span>
             <span>10 followers</span>
           </div>
 

@@ -1,4 +1,8 @@
 import {
+  FOLLOW_USER_FAIL,
+  FOLLOW_USER_FAILURE,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
   GET_RECOMMENDED_USERS_FAILURE,
@@ -29,6 +33,7 @@ export const authReducer = (state = initialState, action) => {
     case REGISTER_REQUEST:
     case GET_PROFILE_REQUEST:
     case GET_RECOMMENDED_USERS_REQUEST:
+    case FOLLOW_USER_REQUEST:
       return { ...state, loading: true, error: null };
 
     case GET_PROFILE_SUCCESS:
@@ -47,10 +52,16 @@ export const authReducer = (state = initialState, action) => {
         error: null,
       };
 
-    case LOGIN_FAILURE:
-    case REGISTER_FAILURE:
-    case GET_RECOMMENDED_USERS_FAILURE:
-      return { ...state, loading: false, error: action.payload };
+    case FOLLOW_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: {
+          ...state.user,
+          followList: [...state.user.followList, action.payload.followedUserId],
+        },
+        error: null,
+      };
 
     case GET_RECOMMENDED_USERS_SUCCESS:
       return {
@@ -59,6 +70,12 @@ export const authReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
+
+    case LOGIN_FAILURE:
+    case REGISTER_FAILURE:
+    case GET_RECOMMENDED_USERS_FAILURE:
+    case FOLLOW_USER_FAILURE:
+      return { ...state, loading: false, error: action.payload };
 
     default:
       return state;
