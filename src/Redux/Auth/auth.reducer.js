@@ -55,12 +55,8 @@ export const authReducer = (state = initialState, action) => {
     case FOLLOW_USER_SUCCESS:
       return {
         ...state,
+        user: action.payload,
         loading: false,
-        user: {
-          ...state.user,
-          followList: [...state.user.followList, action.payload.followedUserId],
-        },
-        error: null,
       };
 
     case GET_RECOMMENDED_USERS_SUCCESS:

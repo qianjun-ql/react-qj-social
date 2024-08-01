@@ -6,15 +6,20 @@ import { followUserAction } from "../../Redux/Auth/auth.action";
 
 const RecommendedUserCard = ({ users }) => {
   const dispatch = useDispatch();
-  const loggedInUserId = useSelector((state) => state.auth.user?.id);
+  const loggedInUser = useSelector((state) => state.auth.user);
+  const followList = loggedInUser?.followList || [];
 
   if (!users || users.length === 0) {
     return null;
   }
 
-  const handleFollow = (userId) => {
-    dispatch(followUserAction(loggedInUserId, userId));
-    console.log("Flw", userId, "by", loggedInUserId);
+  const handleFollowToggle = (userId) => {
+    dispatch(followUserAction(loggedInUser.id, userId));
+    console.log(
+      `${followList.includes(userId) ? "Unfollow" : "Follow"} ${userId} by ${
+        loggedInUser.id
+      }`
+    );
   };
 
   return (
@@ -27,7 +32,11 @@ const RecommendedUserCard = ({ users }) => {
               {user.profilePhoto}
             </Avatar>
           }
-          action={<Button onClick={() => handleFollow(user.id)}>Follow</Button>}
+          action={
+            <Button onClick={() => handleFollowToggle(user.id)}>
+              {followList.includes(user.id) ? "Unfollow" : "Follow"}
+            </Button>
+          }
           title={`${user.firstName} ${user.lastName}`}
           subheader={`@${user.firstName.toLowerCase()}_${user.lastName.toLowerCase()}`}
         />

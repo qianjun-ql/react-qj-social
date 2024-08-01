@@ -15,7 +15,7 @@ const Center = () => {
 
   const dispatch = useDispatch();
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
-  const { post } = useSelector((store) => store);
+  const { post, auth } = useSelector((store) => store);
 
   const handleCloseCreatePostModal = () => setOpenCreatePostModal(false);
 
@@ -31,6 +31,12 @@ const Center = () => {
   useEffect(() => {
     dispatch(getAllPostAction());
   }, [dispatch, post.newComment]);
+
+  const filteredPost = post.posts.filter((item) =>
+    auth.user.followList.includes(item.user.id)
+  );
+
+  console.log(filteredPost);
 
   return (
     <div className="px-20">
@@ -85,7 +91,7 @@ const Center = () => {
       </Card>
 
       <div className="mt-5 space-y-5">
-        {post.posts.map((item) => (
+        {filteredPost.map((item) => (
           <PostCard key={item.id} item={item} />
         ))}
       </div>
