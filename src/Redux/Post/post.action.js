@@ -12,6 +12,9 @@ import {
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
+  SAVE_POST_FAILURE,
+  SAVE_POST_REQUEST,
+  SAVE_POST_SUCCESS,
 } from "./post.actionType";
 
 export const createPostAction = (postData) => async (dispatch) => {
@@ -59,5 +62,31 @@ export const likePostAction = (postId) => async (dispatch) => {
   } catch (error) {
     console.log("error: ", error);
     dispatch({ type: LIKE_POST_FAILURE, payload: error });
+  }
+};
+
+// export const savePostAction = (postId) => async (dispatch) => {
+//   dispatch({ type: SAVE_POST_REQUEST });
+//   try {
+//     const { data } = await api.put(`/api/posts/save/${postId}`);
+//     dispatch({ type: SAVE_POST_SUCCESS, payload: data });
+//   } catch (error) {
+//     dispatch({ type: SAVE_POST_FAILURE, payload: error });
+//   }
+// };
+
+export const savePostAction = (postId) => async (dispatch) => {
+  dispatch({ type: SAVE_POST_REQUEST });
+  try {
+    const { data } = await api.put(`/api/posts/save/${postId}`);
+    dispatch({
+      type: SAVE_POST_SUCCESS,
+      payload: { postId, saved: data.saved },
+    });
+  } catch (error) {
+    dispatch({
+      type: SAVE_POST_FAILURE,
+      payload: error.message,
+    });
   }
 };

@@ -1,5 +1,4 @@
 import {
-  FOLLOW_USER_FAIL,
   FOLLOW_USER_FAILURE,
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
@@ -8,6 +7,9 @@ import {
   GET_RECOMMENDED_USERS_FAILURE,
   GET_RECOMMENDED_USERS_REQUEST,
   GET_RECOMMENDED_USERS_SUCCESS,
+  GET_USER_SAVED_POSTS_FAILURE,
+  GET_USER_SAVED_POSTS_REQUEST,
+  GET_USER_SAVED_POSTS_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -26,14 +28,17 @@ const initialState = {
   user: null,
   searchUser: [],
   recommendedUsers: [],
+  savedPosts: [],
 };
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
     case GET_PROFILE_REQUEST:
+    case UPDATE_PROFILE_REQUEST:
     case GET_RECOMMENDED_USERS_REQUEST:
     case FOLLOW_USER_REQUEST:
+    case GET_USER_SAVED_POSTS_REQUEST:
       return { ...state, loading: true, error: null };
 
     case GET_PROFILE_SUCCESS:
@@ -67,10 +72,19 @@ export const authReducer = (state = initialState, action) => {
         error: null,
       };
 
+    case GET_USER_SAVED_POSTS_SUCCESS:
+      return {
+        ...state,
+        savedPosts: action.payload,
+        loading: false,
+        error: null,
+      };
+
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
     case GET_RECOMMENDED_USERS_FAILURE:
     case FOLLOW_USER_FAILURE:
+    case GET_USER_SAVED_POSTS_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
     default:

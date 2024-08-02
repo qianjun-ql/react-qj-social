@@ -6,6 +6,7 @@ import UserReelCard from "../../components/Reels/UserReelCard";
 import ProfileModal from "./ProfileModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersPostAction } from "../../Redux/Post/post.action";
+import { getUserSavedPosts } from "../../Redux/Auth/auth.action";
 
 const Profile = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const Profile = () => {
   useEffect(() => {
     if (id) {
       dispatch(getUsersPostAction(id));
+      dispatch(getUserSavedPosts(id));
     }
   }, [id, dispatch]);
 
@@ -35,7 +37,7 @@ const Profile = () => {
   };
 
   const reels = [1, 1, 1, 1, 1]; // Dummy data for reels
-  const savePosts = [1, 1, 1, 1, 1]; // Dummy data for saved posts
+  // const savePosts = [1, 1, 1, 1, 1]; // Dummy data for saved posts
 
   return (
     <Card className="my-10 w-[70%] ">
@@ -77,8 +79,8 @@ const Profile = () => {
 
           <div className="flex gap-5 items-center py-3">
             <span>{post.userPosts.length} posts</span>
-            <span>35 following</span>
-            <span>10 followers</span>
+            <span>{auth.user.followList.length} following</span>
+            <span>{auth.user.followers.length} followers</span>
           </div>
 
           <div>
@@ -119,14 +121,15 @@ const Profile = () => {
               </div>
             ) : value === "saved" ? (
               <div className="space-y-5 w-[70%] my-10">
-                {savePosts.map((item, index) => (
-                  <div
-                    key={index}
-                    className="border border-slate-100 rounded-md"
-                  >
-                    <PostCard />
-                  </div>
-                ))}
+                {auth.savedPosts &&
+                  auth.savedPosts.map((item) => (
+                    <div
+                      key={item.id}
+                      className="border border-slate-100 rounded-md"
+                    >
+                      <PostCard item={item} />
+                    </div>
+                  ))}
               </div>
             ) : (
               <div>Repost</div>

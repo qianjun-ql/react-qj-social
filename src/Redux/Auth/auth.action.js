@@ -22,6 +22,9 @@ import {
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
   FOLLOW_USER_FAILURE,
+  GET_USER_SAVED_POSTS_REQUEST,
+  GET_USER_SAVED_POSTS_SUCCESS,
+  GET_USER_SAVED_POSTS_FAILURE,
 } from "./auth.actionType";
 
 export const logingUserAction = (loginData) => async (dispatch) => {
@@ -124,11 +127,27 @@ export const followUserAction =
   (loggedInUserId, userIdToFollow) => async (dispatch) => {
     dispatch({ type: FOLLOW_USER_REQUEST });
     try {
-      const response = await api.put(`/api/users/follow/${userIdToFollow}`, {
+      const { data } = await api.put(`/api/users/follow/${userIdToFollow}`, {
         loggedInUserId,
       });
-      dispatch({ type: FOLLOW_USER_SUCCESS, payload: response.data });
+      dispatch({ type: FOLLOW_USER_SUCCESS, payload: data });
     } catch (error) {
-      dispatch({ type: FOLLOW_USER_FAILURE, payload: error.message });
+      dispatch({ type: FOLLOW_USER_FAILURE, payload: error });
     }
   };
+
+export const getUserSavedPosts = () => async (dispatch) => {
+  dispatch({ type: GET_USER_SAVED_POSTS_REQUEST });
+
+  try {
+    const { data } = await api.get(`/api/users/saved-posts`);
+    console.log("saved posts", data);
+    dispatch({ type: GET_USER_SAVED_POSTS_SUCCESS, payload: data });
+  } catch (error) {
+    console.log("Error:", error.response ? error.response.data : error.message);
+    dispatch({
+      type: GET_USER_SAVED_POSTS_FAILURE,
+      payload: error.response ? error.response.data : error.message,
+    });
+  }
+};
