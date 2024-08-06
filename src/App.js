@@ -8,20 +8,26 @@ import { useEffect, useState } from "react";
 import { getProfileAction } from "./Redux/Auth/auth.action";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./theme/DarkTheme";
-import { Button } from "@mui/material";
+import { Button, Backdrop, CircularProgress } from "@mui/material";
 import CommunityPage from "./pages/Community/CommunityPage";
 import CreateReelsForm from "./components/Reels/CreateReelsForm";
 import Profile from "./pages/Profile/Profile";
 import Reels from "./components/Reels/Reels";
+import Account from "./pages/Account/Account";
 
 function App() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
   const [theme, setTheme] = useState(darkTheme);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(getProfileAction(jwt));
+    setLoading(true);
+    if (jwt) {
+      dispatch(getProfileAction(jwt));
+    }
+    setLoading(false);
   }, [dispatch, jwt]);
 
   const toggleTheme = () => {
@@ -42,6 +48,12 @@ function App() {
         <Button onClick={toggleTheme}>
           Switch to {theme === darkTheme ? "Light" : "Dark"} Mode
         </Button>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
     </ThemeProvider>
   );

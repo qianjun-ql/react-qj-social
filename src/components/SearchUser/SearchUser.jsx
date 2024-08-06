@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchUserAction } from "../../Redux/Auth/auth.action";
 import { createChat } from "../../Redux/Message/message.action";
 
-const SearchUser = () => {
+const SearchUser = ({ onUserClick }) => {
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
   const {
@@ -22,9 +22,9 @@ const SearchUser = () => {
     }
   };
 
-  const handleClick = (id) => {
-    dispatch(createChat({ userId: id }));
-  };
+  // const handleClick = (id) => {
+  //   dispatch(createChat({ userId: id }));
+  // };
 
   const filteredUsers = userName
     ? searchUser.filter(
@@ -55,7 +55,8 @@ const SearchUser = () => {
               className="cursor-pointer mb-2"
               key={item.id}
               onClick={() => {
-                handleClick(item.id);
+                // handleClick(item.id);
+                onUserClick(item.id);
                 setUserName("");
               }}
             >

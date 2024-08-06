@@ -25,6 +25,12 @@ import {
   GET_USER_SAVED_POSTS_REQUEST,
   GET_USER_SAVED_POSTS_SUCCESS,
   GET_USER_SAVED_POSTS_FAILURE,
+  LOGOUT_USER_REQUEST,
+  LOGOUT_USER_SUCCESS,
+  LOGOUT_USER_FAILURE,
+  GET_USER_BY_ID_REQUEST,
+  GET_USER_BY_ID_SUCCESS,
+  GET_USER_BY_ID_FAILURE,
 } from "./auth.actionType";
 
 export const logingUserAction = (loginData) => async (dispatch) => {
@@ -67,21 +73,20 @@ export const registerUserAction = (registerData) => async (dispatch) => {
   }
 };
 
-export const getProfileAction = (token) => async (dispatch) => {
+export const getProfileAction = () => async (dispatch) => {
   dispatch({ type: GET_PROFILE_REQUEST });
 
   try {
+    const jwt = localStorage.getItem("jwt");
     const { data } = await axios.get(`${API_BASE_URL}/api/users/profile`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${jwt}`,
       },
     });
 
-    console.log("profile", data);
     dispatch({ type: GET_PROFILE_SUCCESS, payload: data });
   } catch (error) {
-    console.log("Error:");
-    dispatch({ type: GET_PROFILE_FAILURE, payload: error });
+    dispatch({ type: GET_PROFILE_FAILURE, payload: error.response.data });
   }
 };
 
@@ -116,7 +121,12 @@ export const searchUserAction = (query) => async (dispatch) => {
 export const getRecommendedUsersAction = () => async (dispatch) => {
   dispatch({ type: GET_RECOMMENDED_USERS_REQUEST });
   try {
-    const { data } = await api.get("/api/users");
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get("/api/users", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     dispatch({ type: GET_RECOMMENDED_USERS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: GET_RECOMMENDED_USERS_FAILURE, payload: error });
@@ -140,7 +150,12 @@ export const getUserSavedPosts = () => async (dispatch) => {
   dispatch({ type: GET_USER_SAVED_POSTS_REQUEST });
 
   try {
-    const { data } = await api.get(`/api/users/saved-posts`);
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get(`/api/users/saved-posts`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     console.log("saved posts", data);
     dispatch({ type: GET_USER_SAVED_POSTS_SUCCESS, payload: data });
   } catch (error) {
@@ -149,5 +164,37 @@ export const getUserSavedPosts = () => async (dispatch) => {
       type: GET_USER_SAVED_POSTS_FAILURE,
       payload: error.response ? error.response.data : error.message,
     });
+  }
+};
+
+export const getUserById = (userId) => async (dispatch) => {
+  dispatch({ type: GET_USER_BY_ID_REQUEST });
+
+  try {
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get(`/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log("get userid", data);
+    dispatch({ type: GET_USER_BY_ID_SUCCESS, payload: data });
+  } catch (error) {
+    console.log("Error:", error.response ? error.response.data : error.message);
+    dispatch({
+      type: GET_USER_BY_ID_FAILURE,
+      payload: error.response ? error.response.data : error.message,
+    });
+  }
+};
+
+export const logOutUser = () => async (dispatch) => {
+  dispatch({ type: LOGOUT_USER_REQUEST });
+
+  try {
+    localStorage.removeItem("jwt");
+    dispatch({ type: LOGOUT_USER_SUCCESS });
+  } catch (error) {
+    dispatch({ type: LOGOUT_USER_FAILURE, payload: error.message });
   }
 };

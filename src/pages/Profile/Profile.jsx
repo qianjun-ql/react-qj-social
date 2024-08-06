@@ -6,7 +6,7 @@ import UserReelCard from "../../components/Reels/UserReelCard";
 import ProfileModal from "./ProfileModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersPostAction } from "../../Redux/Post/post.action";
-import { getUserSavedPosts } from "../../Redux/Auth/auth.action";
+import { getUserById } from "../../Redux/Auth/auth.action";
 
 const Profile = () => {
   const { id } = useParams();
@@ -14,11 +14,12 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { auth, post } = useSelector((store) => store);
+  const isOwnProfile = auth.user?.id === id;
 
   useEffect(() => {
     if (id) {
       dispatch(getUsersPostAction(id));
-      dispatch(getUserSavedPosts(id));
+      dispatch(getUserById(id));
     }
   }, [id, dispatch]);
 
@@ -37,7 +38,6 @@ const Profile = () => {
   };
 
   const reels = [1, 1, 1, 1, 1]; // Dummy data for reels
-  // const savePosts = [1, 1, 1, 1, 1]; // Dummy data for saved posts
 
   return (
     <Card className="my-10 w-[70%] ">
@@ -45,7 +45,7 @@ const Profile = () => {
         <div className="h-[15rem]">
           <img
             className="w-full h-full rounded-t-md"
-            src={auth.user.bannerPhoto}
+            src={auth.viewedUser?.bannerPhoto}
             alt=""
           />
         </div>
@@ -53,10 +53,10 @@ const Profile = () => {
           <Avatar
             className="transform -translate-y-24"
             sx={{ width: "10rem", height: "10rem" }}
-            src={auth.user.profilePhoto}
+            src={auth.viewedUser?.profilePhoto}
           />
 
-          {true ? (
+          {isOwnProfile ? (
             <Button
               onClick={handleOpen}
               variant="outlined"
@@ -73,18 +73,18 @@ const Profile = () => {
 
         <div className="p-5">
           <h1 className="py-1 font-bold text-xl">
-            {auth.user?.firstName + " " + auth.user.lastName}
+            {auth.viewedUser?.firstName + " " + auth.viewedUser?.lastName}
           </h1>
-          <p>@{auth.user?.firstName + "_" + auth.user.lastName}</p>
+          <p>@{auth.viewedUser?.firstName + "_" + auth.viewedUser?.lastName}</p>
 
           <div className="flex gap-5 items-center py-3">
             <span>{post.userPosts.length} posts</span>
-            <span>{auth.user.followList.length} following</span>
-            <span>{auth.user.followers.length} followers</span>
+            <span>{auth.viewedUser?.followList.length} following</span>
+            <span>{auth.viewedUser?.followers.length} followers</span>
           </div>
 
           <div>
-            <p>{auth.user?.bio}</p>
+            <p>{auth.viewedUser?.bio}</p>
           </div>
         </div>
         <section>

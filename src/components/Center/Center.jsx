@@ -15,7 +15,9 @@ const Center = () => {
 
   const dispatch = useDispatch();
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
+  const [filteredPost, setFilteredPost] = useState([]);
   const { post, auth } = useSelector((store) => store);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseCreatePostModal = () => setOpenCreatePostModal(false);
 
@@ -30,13 +32,18 @@ const Center = () => {
 
   useEffect(() => {
     dispatch(getAllPostAction());
+    console.log("get all posts action triggered");
   }, [dispatch, post.newComment]);
 
-  const filteredPost = post.posts.filter((item) =>
-    auth.user.followList.includes(item.user.id)
-  );
-
-  console.log(filteredPost);
+  useEffect(() => {
+    if (auth.user) {
+      const filtered = post.posts.filter((item) =>
+        auth.user.followList.includes(item.user.id)
+      );
+      setFilteredPost(filtered);
+      console.log("filtered post use effect");
+    }
+  }, [auth.user, post.posts]);
 
   return (
     <div className="px-20">

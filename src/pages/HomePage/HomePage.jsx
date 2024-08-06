@@ -9,6 +9,7 @@ import RightSection from "../../components/RightSection/RightSection";
 import SideBar from "../../components/SideBar/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileAction } from "../../Redux/Auth/auth.action";
+import Account from "../Account/Account";
 
 const HomePage = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ const HomePage = () => {
             <Route path="/reels" element={<Reels />} />
             <Route path="/create-reels" element={<CreateReelsForm />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </Grid>
 
@@ -47,13 +49,6 @@ const HomePage = () => {
           </Grid>
         )}
       </Grid>
-
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </div>
   );
 };

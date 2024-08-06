@@ -32,7 +32,12 @@ export const createChat = (chat) => async (dispatch) => {
 export const getAllChats = () => async (dispatch) => {
   dispatch({ type: actionType.GET_ALL_CHATS_REQUEST });
   try {
-    const { data } = await api.get(`/api/chats`);
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get(`/api/chats`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     console.log("get all chats", data);
 
     dispatch({ type: actionType.GET_ALL_CHATS_SUCCESS, payload: data });

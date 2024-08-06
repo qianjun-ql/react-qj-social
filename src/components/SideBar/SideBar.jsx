@@ -2,14 +2,16 @@ import React from "react";
 import { sidebarMenu } from "./SidebarNavigation";
 import { Avatar, Button, Card, Divider, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
+import { logOutUser } from "../../Redux/Auth/auth.action";
 
 const SideBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,6 +27,14 @@ const SideBar = () => {
     } else {
       navigate(item.path);
     }
+  };
+
+  const handleNavigateAccount = () => {
+    navigate("/account");
+  };
+
+  const handleLogout = () => {
+    dispatch(logOutUser());
   };
 
   return (
@@ -85,9 +95,8 @@ const SideBar = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleNavigateAccount}>My account</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>
       </div>

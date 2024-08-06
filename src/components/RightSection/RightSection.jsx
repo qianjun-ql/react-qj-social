@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRecommendedUsersAction } from "../../Redux/Auth/auth.action";
 import SearchUser from "../SearchUser/SearchUser";
 import RecommendedUserCard from "../RecommendedUserCard/RecommendedUserCard";
+import { useNavigate } from "react-router-dom";
 
 const RightSection = () => {
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state.auth.recommendedUsers);
   const [showAllUsers, setShowAllUsers] = useState(false);
   const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getRecommendedUsersAction());
@@ -27,9 +29,13 @@ const RightSection = () => {
 
   const handleToggle = () => setShowAllUsers((prevShowAll) => !prevShowAll);
 
+  const navigateToProfile = (userId) => {
+    navigate(`/profile/${userId}`);
+  };
+
   return (
     <div className="pr-5">
-      <SearchUser />
+      <SearchUser onUserClick={navigateToProfile} />
 
       <Card className="p-5">
         <div className="flex justify-between py-5 items-center">

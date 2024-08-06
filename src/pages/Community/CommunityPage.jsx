@@ -9,6 +9,7 @@ import SideBar from "../../components/SideBar/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileAction } from "../../Redux/Auth/auth.action";
 import CommunityCenter from "../../components/Center/CommunityCenter";
+import Account from "../Account/Account";
 
 const CommunityPage = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const CommunityPage = () => {
             <Route path="/reels" element={<Reels />} />
             <Route path="/create-reels" element={<CreateReelsForm />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </Grid>
         <Grid item xs={3} className="relative">

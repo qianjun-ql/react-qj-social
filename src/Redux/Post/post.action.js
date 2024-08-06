@@ -32,7 +32,12 @@ export const createPostAction = (postData) => async (dispatch) => {
 export const getAllPostAction = () => async (dispatch) => {
   dispatch({ type: GET_ALL_POST_REQUEST });
   try {
-    const { data } = await api.get("/api/posts");
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get("/api/posts", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     dispatch({ type: GET_ALL_POST_SUCCESS, payload: data });
     console.log("get all post", data);
   } catch (error) {
@@ -44,7 +49,12 @@ export const getAllPostAction = () => async (dispatch) => {
 export const getUsersPostAction = (userId) => async (dispatch) => {
   dispatch({ type: GET_USERS_POST_REQUEST });
   try {
-    const { data } = await api.get(`/api/posts/user/${userId}`);
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.get(`/api/posts/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     dispatch({ type: GET_USERS_POST_SUCCESS, payload: data });
     console.log("get user post", data);
   } catch (error) {
@@ -78,7 +88,12 @@ export const likePostAction = (postId) => async (dispatch) => {
 export const savePostAction = (postId) => async (dispatch) => {
   dispatch({ type: SAVE_POST_REQUEST });
   try {
-    const { data } = await api.put(`/api/posts/save/${postId}`);
+    const jwt = localStorage.getItem("jwt");
+    const { data } = await api.put(`/api/posts/save/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     dispatch({
       type: SAVE_POST_SUCCESS,
       payload: { postId, saved: data.saved },

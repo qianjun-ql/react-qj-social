@@ -14,7 +14,11 @@ import SearchUser from "../../components/SearchUser/SearchUser";
 import UserChatCard from "./UserChatCard";
 import ChatMessage from "./ChatMessage";
 import { useDispatch, useSelector } from "react-redux";
-import { createMessage, getAllChats } from "../../Redux/Message/message.action";
+import {
+  createChat,
+  createMessage,
+  getAllChats,
+} from "../../Redux/Message/message.action";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 import SockJS from "sockjs-client";
@@ -148,6 +152,11 @@ const Message = () => {
     }
   };
 
+  const handleUserSelectionForChat = (userId) => {
+    // Dispatch action to create a chat with the selected user
+    dispatch(createChat({ userId }));
+  };
+
   return (
     <div>
       <Grid container className="h-screen overflow-y-hidden">
@@ -163,7 +172,8 @@ const Message = () => {
               </Link>
               <div className="h-[83vh]">
                 <div>
-                  <SearchUser />
+                  <SearchUser onUserClick={handleUserSelectionForChat} />
+                  {/* <SearchUser /> */}
                 </div>
                 <div className="h-full space-y-4 mt-5 overflow-y-scroll hideScrollBar">
                   {message?.chats?.map((item) => (
