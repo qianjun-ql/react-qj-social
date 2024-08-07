@@ -78,6 +78,7 @@ export const postReducer = (state = initialState, action) => {
       return {
         ...state,
         userPosts: action.payload,
+        commentList: action.payload.commentList,
         loading: false,
         error: null,
       };

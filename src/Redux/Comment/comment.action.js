@@ -1,12 +1,12 @@
 import { api } from "../../config/api";
-import { getAllPostAction } from "../Post/post.action";
+import { getAllPostAction, getUsersPostAction } from "../Post/post.action";
 import {
   CREATE_COMMENT_FAILURE,
   CREATE_COMMENT_REQUEST,
   CREATE_COMMENT_SUCCESS,
 } from "./comment.actionType";
 
-export const createCommentAction = (reqData) => async (dispatch) => {
+export const createCommentAction = (reqData, isProfile) => async (dispatch) => {
   dispatch({ type: CREATE_COMMENT_REQUEST });
 
   try {
@@ -17,9 +17,12 @@ export const createCommentAction = (reqData) => async (dispatch) => {
     dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data });
     console.log("comments", data);
 
-    dispatch(getAllPostAction());
+    if (isProfile) {
+      dispatch(getUsersPostAction(reqData.userId));
+    } else {
+      dispatch(getAllPostAction());
+    }
   } catch (error) {
-    console.log("error:", error);
     dispatch({ type: CREATE_COMMENT_FAILURE, payload: error });
   }
 };

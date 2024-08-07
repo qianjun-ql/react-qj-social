@@ -8,7 +8,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -22,9 +22,9 @@ import { createCommentAction } from "../../Redux/Comment/comment.action";
 import { likePostAction, savePostAction } from "../../Redux/Post/post.action";
 import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
 
-const PostCard = ({ item }) => {
+const PostCard = ({ item, isProfile }) => {
   const [showComments, setShowComments] = useState(false);
-  const [saved, setSaved] = useState();
+  const [saved, setSaved] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
@@ -37,9 +37,10 @@ const PostCard = ({ item }) => {
       data: {
         content,
       },
+      userId: item.user.id,
     };
 
-    dispatch(createCommentAction(reqData));
+    dispatch(createCommentAction(reqData, isProfile));
   };
 
   const handleLikePost = () => {
