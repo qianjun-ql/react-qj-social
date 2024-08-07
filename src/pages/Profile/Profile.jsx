@@ -14,7 +14,7 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { auth, post } = useSelector((store) => store);
-  const isOwnProfile = auth.user?.id === id;
+  const isOwnProfile = auth.user?.id === Number(id);
 
   useEffect(() => {
     if (id) {
