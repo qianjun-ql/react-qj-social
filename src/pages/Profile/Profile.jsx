@@ -6,7 +6,7 @@ import UserReelCard from "../../components/Reels/UserReelCard";
 import ProfileModal from "./ProfileModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersPostAction } from "../../Redux/Post/post.action";
-import { getUserById } from "../../Redux/Auth/auth.action";
+import { getUserById, getUserSavedPosts } from "../../Redux/Auth/auth.action";
 
 const Profile = () => {
   const { id } = useParams();
@@ -20,6 +20,7 @@ const Profile = () => {
     if (id) {
       dispatch(getUsersPostAction(id));
       dispatch(getUserById(id));
+      dispatch(getUserSavedPosts(id));
     }
   }, [id, dispatch]);
 

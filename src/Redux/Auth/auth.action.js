@@ -146,12 +146,12 @@ export const followUserAction =
     }
   };
 
-export const getUserSavedPosts = () => async (dispatch) => {
+export const getUserSavedPosts = (userId) => async (dispatch) => {
   dispatch({ type: GET_USER_SAVED_POSTS_REQUEST });
 
   try {
     const jwt = localStorage.getItem("jwt");
-    const { data } = await api.get(`/api/users/saved-posts`, {
+    const { data } = await api.get(`/api/users/saved-posts/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },

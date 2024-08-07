@@ -75,33 +75,33 @@ export const likePostAction = (postId) => async (dispatch) => {
   }
 };
 
-// export const savePostAction = (postId) => async (dispatch) => {
-//   dispatch({ type: SAVE_POST_REQUEST });
-//   try {
-//     const { data } = await api.put(`/api/posts/save/${postId}`);
-//     dispatch({ type: SAVE_POST_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({ type: SAVE_POST_FAILURE, payload: error });
-//   }
-// };
-
 export const savePostAction = (postId) => async (dispatch) => {
   dispatch({ type: SAVE_POST_REQUEST });
   try {
-    const jwt = localStorage.getItem("jwt");
-    const { data } = await api.put(`/api/posts/save/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-    dispatch({
-      type: SAVE_POST_SUCCESS,
-      payload: { postId, saved: data.saved },
-    });
+    const { data } = await api.put(`/api/posts/save/${postId}`);
+    dispatch({ type: SAVE_POST_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: SAVE_POST_FAILURE,
-      payload: error.message,
-    });
+    dispatch({ type: SAVE_POST_FAILURE, payload: error });
   }
 };
+
+// export const savePostAction = (postId) => async (dispatch) => {
+//   dispatch({ type: SAVE_POST_REQUEST });
+//   try {
+//     const jwt = localStorage.getItem("jwt");
+//     const { data } = await api.put(`/api/posts/save/${postId}`, {
+//       headers: {
+//         Authorization: `Bearer ${jwt}`,
+//       },
+//     });
+//     dispatch({
+//       type: SAVE_POST_SUCCESS,
+//       payload: { postId, saved: data.saved },
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: SAVE_POST_FAILURE,
+//       payload: error.message,
+//     });
+//   }
+// };
