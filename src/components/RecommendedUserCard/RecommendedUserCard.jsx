@@ -27,11 +27,7 @@ const RecommendedUserCard = ({ users }) => {
       {users.map((user) => (
         <CardHeader
           key={user.id}
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {user.profilePhoto}
-            </Avatar>
-          }
+          avatar={<Avatar aria-label="recipe">{user.profilePhoto}</Avatar>}
           action={
             <Button onClick={() => handleFollowToggle(user.id)}>
               {followList.includes(user.id) ? "Unfollow" : "Follow"}

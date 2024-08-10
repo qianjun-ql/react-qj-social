@@ -8,7 +8,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -21,17 +21,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCommentAction } from "../../Redux/Comment/comment.action";
 import { likePostAction, savePostAction } from "../../Redux/Post/post.action";
 import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
+import { getUserSavedPosts } from "../../Redux/Auth/auth.action";
 
 const PostCard = ({ item, isProfile }) => {
   const [showComments, setShowComments] = useState(false);
-  const [saved, setSaved] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const post = useSelector((state) => state.post);
+  const savedPosts = auth.savedPosts;
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    if (auth.user && auth.user.id) {
+      dispatch(getUserSavedPosts(auth.user.id));
+    }
+  }, [dispatch, auth.user]);
+
+  useEffect(() => {
+    setIsSaved(savedPosts.some((post) => post.id === item.id));
+  }, [savedPosts, item.id]);
 
   const handleShowComments = () => setShowComments(!showComments);
 
   const handleCreateComment = (content) => {
-    console.log("Creating comment with content:", content);
     const reqData = {
       postId: item?.id,
       data: {
@@ -44,23 +56,23 @@ const PostCard = ({ item, isProfile }) => {
   };
 
   const handleLikePost = () => {
-    console.log("Liking post with ID:", item.id);
     dispatch(likePostAction(item.id));
   };
 
-  const handleSavePost = () => {
-    dispatch(savePostAction(item.id));
-    setSaved(!saved);
-    console.log("Save post", item.id);
+  const handleSavePost = async () => {
+    await dispatch(savePostAction(item.id));
+    setIsSaved((prevState) => !prevState);
+    console.log("Is post saved:", item.id);
   };
 
   return (
     <Card className="">
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {item.user.firstName[0]}
-          </Avatar>
+          <Avatar
+            aria-label="recipe"
+            src={item.user?.profilePhoto || "defaultImageURL"}
+          ></Avatar>
         }
         action={
           <IconButton aria-label="settings">
@@ -104,7 +116,7 @@ const PostCard = ({ item, isProfile }) => {
         </div>
         <div>
           <IconButton onClick={handleSavePost}>
-            {saved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+            {isSaved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
           </IconButton>
         </div>
       </CardActions>
@@ -117,7 +129,6 @@ const PostCard = ({ item, isProfile }) => {
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   handleCreateComment(e.target.value);
-                  console.log("enter pressed----", e.target.value);
                 }
               }}
               className="w-full outline-none bg-transparent border border-[#3b4054] rounded-full px-5 py-2 "

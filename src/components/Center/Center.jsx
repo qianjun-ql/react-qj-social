@@ -55,14 +55,12 @@ const Center = () => {
           <p>New</p>
         </div>
         {/* Placeholder for future avatar list */}
-        {/* {list.map((item, index) => (
-          <AvatarList key={index} />
-        ))} */}
+        <Avatar src={auth.user.profilePhoto || "defaultImageURL"} />
       </section>
 
       <Card className="p-5 mt-5">
         <div className="flex justify-between">
-          <Avatar />
+          <Avatar src={auth.user.profilePhoto || "defaultImageURL"} />
           <input
             onClick={handleOpenCreatePostModal}
             readOnly
@@ -76,7 +74,7 @@ const Center = () => {
               <ImageIcon />
             </IconButton>
 
-            <span>Media</span>
+            <span>Image</span>
           </div>
 
           <div className="flex items-center">
@@ -87,13 +85,13 @@ const Center = () => {
             <span>Video</span>
           </div>
 
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <IconButton color="primary" onClick={handleCreatePost}>
               <DescriptionIcon />
             </IconButton>
 
             <span>Article</span>
-          </div>
+          </div> */}
         </div>
       </Card>
 

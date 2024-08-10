@@ -8,7 +8,10 @@ import Profile from "../Profile/Profile";
 import RightSection from "../../components/RightSection/RightSection";
 import SideBar from "../../components/SideBar/SideBar";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfileAction } from "../../Redux/Auth/auth.action";
+import {
+  getProfileAction,
+  getUserSavedPosts,
+} from "../../Redux/Auth/auth.action";
 import Account from "../Account/Account";
 
 const HomePage = () => {

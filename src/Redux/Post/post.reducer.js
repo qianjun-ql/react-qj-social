@@ -25,6 +25,7 @@ const initialState = {
   like: null,
   commentList: [],
   newComment: null,
+  savedPosts: [],
 };
 
 export const postReducer = (state = initialState, action) => {
@@ -45,24 +46,15 @@ export const postReducer = (state = initialState, action) => {
         error: null,
       };
 
-    // case SAVE_POST_SUCCESS:
-    //   return {
-    //     ...state,
-    //     user: action.payload,
-    //     loading: false,
-    //   };
-
     case SAVE_POST_SUCCESS:
       const { postId, saved } = action.payload;
+
+      console.log("Reducer updating savedPosts:", postId, saved);
       return {
         ...state,
-        savedPosts: saved
-          ? [
-              ...state.savedPosts,
-              state.userPosts.find((post) => post.id === postId),
-            ]
-          : state.savedPosts.filter((post) => post.id !== postId),
-        loading: false,
+        savedPosts: action.payload.saved
+          ? [...state.savedPosts, action.payload]
+          : state.savedPosts.filter((post) => post.id !== action.payload.id),
       };
 
     case GET_ALL_POST_SUCCESS:
